@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -euo pipefail
+
+BIN_DIR=$(dirname $(readlink -f $0))
+
+source $BIN_DIR/common
+
+VERSION_FILE="${APP_ROOT}/VERSION"
+
+if [ -f $VERSION_FILE ]; then
+    readarray -t versions < $VERSION_FILE
+    
+    patch_line="${versions[2]}"
+    patch=$(printf %s "$patch_line" | awk -F= '{printf("%d",$2)}')
+    new_patch=$(($patch + 1))
+
+    echo "Bumping patch version from $patch to $new_patch"
+
+    versions[2]="patch=$new_patch"
+
+    echo "New version: ${versions[@]}"
+
+    printf "%s\n" "${versions[@]}" > $VERSION_FILE
+else
+    echo "ERROR: $VERSION_FILE is missing"
+    exit 1
+fi
