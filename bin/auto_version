@@ -9,8 +9,9 @@ source $BIN_DIR/common
 VERSION_FILE="${APP_ROOT}/VERSION"
 
 if [ ! -f $VERSION_FILE ]; then
-    echo "ERROR: $VERSION_FILE is missing"
-    exit 1
+    echo "major=0" >> $VERSION_FILE 
+    echo "minor=0" >> $VERSION_FILE 
+    echo "patch=0" >> $VERSION_FILE 
 fi
 
 readarray -t versions < $VERSION_FILE
